@@ -5,14 +5,12 @@ using System.Threading.Tasks;
 
 namespace HRMS.Models
 {
-    public class Employee
+    public class Role
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string Address { get; set; }
-        public int DeptId { get; set; }
 
-        public int Salary { get; set; }
+        public int Id { get; set; }
+        public string RoleName { get; set; }
+
 
         public DateTime? DateCreated { get; set; }
 
@@ -20,9 +18,12 @@ namespace HRMS.Models
         public DateTime? DateUpdated { get; set; }
         public bool? IsDeleted { get; set; }
 
-        public bool Status { get; set; }
+        public bool? Status { get; set; }
 
-        public virtual Department Department { get; set; }
+        public virtual List<Users> Users { get; set; }
+       
 
-    }
+	
+
+	}
 }

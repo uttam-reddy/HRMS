@@ -37,16 +37,99 @@ namespace HRMS.Models
                     .HasDefaultValueSql("(getdate())");
 
                 entity.Property(e => e.Status).HasDefaultValueSql("((1))");
-                //entity.Property(e => e.IsDeleted).HasDefaultValueSql("((0))");
+                entity.Property(e => e.IsDeleted).HasDefaultValueSql("((0))");
 
                 entity.HasOne(d => d.Department)
                 .WithMany(d => d.Employees).HasForeignKey(d => d.DeptId);
 
             }
             );
-            
+
+            modelBuilder.Entity<Department>(entity =>
+            {
+
+
+                entity.ToTable("Department");
+
+                entity.HasKey(c => c.Id);
+                entity.Property(c => c.Id).ValueGeneratedNever();
+
+                entity.Property(c => c.Name).HasColumnName("Name").HasMaxLength(255).IsRequired();
+
+                entity.Property(e => e.DateDeleted).HasColumnType("datetime");
+                entity.Property(e => e.DateUpdated).HasColumnType("datetime");
+                entity.Property(e => e.DateCreated)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.Status).HasDefaultValueSql("((1))");
+                entity.Property(e => e.IsDeleted).HasDefaultValueSql("((0))");
+
+
+            }
+            );
+
+
+            modelBuilder.Entity<Role>(entity =>
+            {
+
+
+                entity.ToTable("Role");
+
+                entity.HasKey(c => c.Id);
+                entity.Property(c => c.Id).ValueGeneratedNever();
+
+                entity.Property(c => c.RoleName).HasColumnName("RoleName").HasMaxLength(255).IsRequired();
+
+                entity.Property(e => e.DateDeleted).HasColumnType("datetime");
+                entity.Property(e => e.DateUpdated).HasColumnType("datetime");
+                entity.Property(e => e.DateCreated)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.Status).HasDefaultValueSql("((1))");
+                entity.Property(e => e.IsDeleted).HasDefaultValueSql("((0))");
+
+
+            }
+           );
+
+
+            modelBuilder.Entity<Users>(entity =>
+            {
+
+
+                entity.ToTable("Users");
+
+                entity.HasKey(c => c.Id);
+                entity.Property(c => c.Id).ValueGeneratedNever();
+
+                entity.Property(c => c.UserName).HasColumnName("UserName").HasMaxLength(255).IsRequired();
+                entity.Property(c => c.Password).HasColumnName("Password").HasMaxLength(255).IsRequired();
+                entity.Property(c => c.Email).HasColumnName("Email").HasMaxLength(255).IsRequired();
+
+                entity.Property(e => e.DateDeleted).HasColumnType("datetime");
+                entity.Property(e => e.DateUpdated).HasColumnType("datetime");
+                entity.Property(e => e.DateCreated)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.Status).HasDefaultValueSql("((1))");
+                entity.Property(e => e.IsDeleted).HasDefaultValueSql("((0))");
+                entity.HasOne(d => d.roles)
+                .WithMany(d => d.Users).HasForeignKey(d => d.RoleId);
+
+
+            }
+          );
+
 
         }
         public virtual DbSet<Employee> Employees { get; set; }
+        public virtual DbSet<Department> Departments { get; set; }
+
+        public virtual DbSet<Users> Users { get; set; }
+
+
     }
 }

@@ -32,7 +32,7 @@ namespace HRMS.Services.Interfaces
                 response.Entity = this.mapper.Map<List<EmployeeDto>>(employees);
                 response.Status = true;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 response.Status = false;
                 response.ReturnMessage.Add(ex.Message);
@@ -68,7 +68,7 @@ namespace HRMS.Services.Interfaces
 
             try
             {
-                var employee = new Employee()
+                var employee = new Employee
                 {
                     Address = employeeDto.Address,
                     Name=employeeDto.Name,
@@ -79,6 +79,8 @@ namespace HRMS.Services.Interfaces
                     DateCreated=DateTime.Now,
                     DateUpdated=DateTime.Now,
                     DateDeleted=null
+                    
+                    
 
                 };
                 _context.Employees.Add(employee);
@@ -127,6 +129,47 @@ namespace HRMS.Services.Interfaces
                     response.Status = true;
                 }
                 
+            }
+            catch (Exception ex)
+            {
+                response.Status = false;
+                response.ReturnMessage.Add(ex.Message);
+                Ilog.LogError(ex.Message);
+            }
+
+            return response;
+        }
+
+        public async Task<ResponseModel<EmployeeDto>> DeleteEmployee(int id)
+        {
+            ResponseModel<EmployeeDto> response = new ResponseModel<EmployeeDto>();
+
+            try
+            {
+                var employee = await _context.Employees.FindAsync(id);
+                if (employee == null)
+                {
+                    response.Status = false;
+                    response.ReturnMessage.Add("Employee not found.");
+                    return response;
+                }
+                else
+                {
+                    if (id != employee.Id)
+                    {
+                        response.Status = false;
+                        return response;
+                    }
+                    
+                    employee.Status = false;
+                    employee.IsDeleted = true;
+                    _context.Entry(employee).State = EntityState.Modified;
+                    await _context.SaveChangesAsync();
+                    var employeeupdate = await _context.Employees.FindAsync(id);
+                    response.Entity = this.mapper.Map<EmployeeDto>(employeeupdate);
+                    response.Status = true;
+                }
+
             }
             catch (Exception ex)
             {

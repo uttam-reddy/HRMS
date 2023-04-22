@@ -16,16 +16,21 @@ namespace HRMS.Helpers
                 .ForMember(dest => dest.DepartmentName,src => src.MapFrom(sc => sc.Department.Name))
                 .ForMember(dest => dest.DepartmentId, src => src.MapFrom(sc => sc.Department.Id));
 
+
+            CreateMap<Users, UsersDto>()
+                .ForMember(dest => dest.RoleId, src => src.MapFrom(sc => sc.roles.Id))
+                .ForMember(dest => dest.RoleName, src => src.MapFrom(sc => sc.roles.RoleName));
+
             //CreateMap<Employee, EmployeeDto>(
 
             //).AfterMap((s,d) =>
             //{
             //    d.DepartmentId=s.Department.Id
 
-                
+
             //}
             //    );
-            
+
         }
     }
 }

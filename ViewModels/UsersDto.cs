@@ -1,18 +1,23 @@
-﻿using System;
+﻿using HRMS.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace HRMS.Models
+namespace HRMS.ViewModels
 {
-    public class Employee
+    public class UsersDto
     {
         public int Id { get; set; }
-        public string Name { get; set; }
-        public string Address { get; set; }
-        public int DeptId { get; set; }
+        public string UserName { get; set; }
+        public string Email { get; set; }
+      
+        public int RoleId { get; set; }
 
         public int Salary { get; set; }
+
+        public string RoleName { get; set; }
+
 
         public DateTime? DateCreated { get; set; }
 
@@ -20,9 +25,9 @@ namespace HRMS.Models
         public DateTime? DateUpdated { get; set; }
         public bool? IsDeleted { get; set; }
 
-        public bool Status { get; set; }
+        public bool? Status { get; set; }
 
-        public virtual Department Department { get; set; }
+        //public virtual Role roles { get; set; }
 
     }
 }

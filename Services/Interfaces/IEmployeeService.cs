@@ -17,6 +17,8 @@ namespace HRMS.Services.Interfaces
 
         Task<ResponseModel<EmployeeDto>> UpdateEmployees(int id,EmployeeDto employeeDto);
 
+        Task<ResponseModel<EmployeeDto>> DeleteEmployee(int id);
+
 
     }
 }

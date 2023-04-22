@@ -115,8 +115,24 @@ namespace HRMS.Controllers
 
         // DELETE api/<EmployeeController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<ActionResult<EmployeeDto>> Delete(int id)
         {
+            ResponseModel<EmployeeDto> response = new ResponseModel<EmployeeDto>();
+            try
+            {
+                response = await _employeeService.DeleteEmployee(id);
+                if (!response.Status)
+                {
+                    return BadRequest(response);
+                }
+                return Ok(response);
+            }
+            catch (Exception)
+            {
+                response.Status = false;
+                return BadRequest(response);
+                throw;
+            }
         }
     }
 }
