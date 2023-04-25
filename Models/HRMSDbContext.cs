@@ -6,12 +6,9 @@ using System.Threading.Tasks;
 
 namespace HRMS.Models
 {
-    public class HRMSDbContext : DbContext
+    public partial class HRMSDbContext : DbContext
     {
-        public HRMSDbContext()
-        {
-
-        }
+       
         public HRMSDbContext(DbContextOptions<HRMSDbContext> options) : base(options)
         {
 

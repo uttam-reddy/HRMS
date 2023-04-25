@@ -29,13 +29,17 @@ namespace HRMS.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public IActionResult Login([FromQuery] UserLogin userLogin)
+        public IActionResult Login([FromBody] UserLogin userLogin)
         {
             var user = GetUser(userLogin);
             if(user != null)
             {
+                ResponseModel<string> response = new ResponseModel<string>();
+
                 var token = GenerateToken(user);
-                return Ok(token);
+                response.Token = token;
+                response.Status = true;
+                return Ok(response);
             }
             return NotFound("User not found");
         }

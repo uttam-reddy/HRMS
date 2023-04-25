@@ -43,7 +43,7 @@ namespace HRMS
             services.AddScoped<IUsersService, UsersService>();
             services.AddDbContext<HRMSDbContext>(options => options.UseSqlServer(
                 Configuration.GetConnectionString("HRMSDBConnection")
-                ) ,ServiceLifetime.Singleton);
+                ));
 
             //services.AddAutoMapper(typeof(Startup).Assembly);
 
@@ -114,7 +114,13 @@ namespace HRMS
             app.UseDefaultFiles();
             app.UseStaticFiles();
             app.UseHttpsRedirection();
-
+            app.UseCors(builder =>
+            {
+                builder
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader();
+            });
             app.UseAuthentication();
             app.UseRouting();
 
