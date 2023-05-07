@@ -31,6 +31,18 @@ namespace HRMS.Helpers
             //}
             //    );
 
+           // CreateMap<EmployeeActivites, EmployeeActivityDto>(
+
+           // ).AfterMap((s,d) =>
+           // {
+           //     d.EmployeeActivityId = s.Id;
+           //     d.Activity = s.Activity;
+           //     d.EmployeeDto = s.Employee;
+
+
+           // }
+           //);
+
         }
     }
 }

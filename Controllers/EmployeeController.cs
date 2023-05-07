@@ -1,11 +1,16 @@
 ﻿using HRMS.Models;
 using HRMS.Services.Interfaces;
 using HRMS.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
+
+
+
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -21,7 +26,9 @@ namespace HRMS.Controllers
             this._employeeService = employeeService;
         }
         // GET: api/<EmployeeController>
+        
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<ResponseModel<IEnumerable<EmployeeDto>>>> Get()
         {
             ResponseModel<IEnumerable<EmployeeDto>> response = new ResponseModel<IEnumerable<EmployeeDto>>();
@@ -47,6 +54,7 @@ namespace HRMS.Controllers
 
         // GET api/<EmployeeController>/5
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<ActionResult<ResponseModel<EmployeeDto>>> Get(int id)
         {
             //var employee = await _employeeService.GetEmployeeById(id);

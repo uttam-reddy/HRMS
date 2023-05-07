@@ -2,6 +2,7 @@ using AutoMapper;
 using HRMS.Helpers;
 using HRMS.Models;
 using HRMS.Services.Interfaces;
+using HRMS.Services.Interfaces.Logging;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -41,9 +42,12 @@ namespace HRMS
             ); 
             services.AddScoped<IEmployeeService, EmployeeService>();
             services.AddScoped<IUsersService, UsersService>();
+            services.AddScoped<IEmployeeActivityService, EmployeeActivityService>();
             services.AddDbContext<HRMSDbContext>(options => options.UseSqlServer(
                 Configuration.GetConnectionString("HRMSDBConnection")
                 ));
+
+            //services.AddSingleton<ILog,Logger>();
 
             //services.AddAutoMapper(typeof(Startup).Assembly);
 

@@ -19,7 +19,8 @@ namespace HRMS.Services.Interfaces
         {
             this._context = context;
             this.mapper = mapper;
-            Ilog = Logger.GetInstance();
+            Ilog = Logger.GetInstance;
+            
         }
         public async Task<ResponseModel<IEnumerable<EmployeeDto>>> GetEmployees() 
         {
