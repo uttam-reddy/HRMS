@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+
 namespace HRMS.Services.Interfaces
 {
     public class EmployeeService : IEmployeeService
@@ -19,7 +20,7 @@ namespace HRMS.Services.Interfaces
         {
             this._context = context;
             this.mapper = mapper;
-            Ilog = Logger.GetInstance;
+            Ilog = Logger.GetInstance();
             
         }
         public async Task<ResponseModel<IEnumerable<EmployeeDto>>> GetEmployees() 
@@ -65,6 +66,7 @@ namespace HRMS.Services.Interfaces
 
         public async Task<ResponseModel<EmployeeDto>> CreateEmployees(EmployeeDto employeeDto)
         {
+            
             ResponseModel<EmployeeDto> response = new ResponseModel<EmployeeDto>();
 
             try

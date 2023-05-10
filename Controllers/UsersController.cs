@@ -33,7 +33,8 @@ namespace HRMS.Controllers
             ResponseModel<IEnumerable<UsersDto>> response = new ResponseModel<IEnumerable<UsersDto>>();
             try
             {
-                response = await _usersService.GetUsers();
+                var connectionstring = _configuration.GetConnectionString("HRMSDBConnection");
+                response = await _usersService.GetUsers(connectionstring);
                 if (!response.Status)
                 {
                     return BadRequest(response);
@@ -57,7 +58,8 @@ namespace HRMS.Controllers
             ResponseModel<UsersDto> response = new ResponseModel<UsersDto>();
             try
             {
-                response = await _usersService.GetUserById(id);
+                var connectionstring = _configuration.GetConnectionString("HRMSDBConnection");
+                response = await _usersService.GetUserById(id,connectionstring);
                 if (!response.Status)
                 {
                     return BadRequest(response);

@@ -81,6 +81,10 @@ namespace HRMS.Controllers
         [HttpPost]
         public async Task<ActionResult<EmployeeDto>> Post([FromBody] EmployeeDto employeeDto)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
             ResponseModel<EmployeeDto> response = new ResponseModel<EmployeeDto>();
             try
             {

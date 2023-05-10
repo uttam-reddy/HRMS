@@ -19,7 +19,7 @@ namespace HRMS.Services.Interfaces
         {
             _context = context;
             _mapper = mapper;
-            Ilog = Logger.GetInstance;
+            Ilog = Logger.GetInstance();
         }
 
         

@@ -1,10 +1,13 @@
 ﻿using AutoMapper;
+using AutoMapper.Configuration;
 using HRMS.Models;
 using HRMS.Services.Interfaces.Logging;
 using HRMS.ViewModels;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -15,21 +18,71 @@ namespace HRMS.Services.Interfaces
         private readonly HRMSDbContext _context;
         private readonly IMapper mapper;
         private readonly ILog Ilog;
+        
+        //private readonly Confi { get; set; }
         public UsersService(HRMSDbContext context,IMapper mapper)
         {
             this._context = context;
             this.mapper = mapper;
-            Ilog = Logger.GetInstance;
+            Ilog = Logger.GetInstance();
+            
         }
-        public async Task<ResponseModel<IEnumerable<UsersDto>>> GetUsers() 
+        public async Task<ResponseModel<IEnumerable<UsersDto>>> GetUsers(string conn) 
         {
             ResponseModel<IEnumerable<UsersDto>> response = new ResponseModel<IEnumerable<UsersDto>>();
 
             try
             {
-                var users = await _context.Users.Include(x => x.roles).ToListAsync();
+                SqlConnection connection = new SqlConnection();
+                connection.ConnectionString = conn;
 
-                response.Entity = this.mapper.Map<List<UsersDto>>(users);
+                connection.Open();
+                string procedureName = "[dbo].[GetUsers]";
+                var result = new List<UsersDto>();
+                using(SqlCommand sqlCommand = new SqlCommand(procedureName,connection))
+                {
+                    sqlCommand.CommandType = CommandType.StoredProcedure;
+
+                    using(SqlDataReader reader = sqlCommand.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            int id = int.Parse(reader[0].ToString());
+                            string Username = reader[1].ToString();
+                            string Email = reader[2].ToString();
+                            int roleid= int.Parse(reader[3].ToString());
+                            DateTime datecreted = (DateTime)reader[4];
+                            DateTime dateupdated = (DateTime)reader[5];
+                            bool status = (bool)reader[6];
+                            bool deleted = (bool)reader[7];
+                            string rolename = reader[8].ToString();
+
+
+
+
+                            UsersDto usersDto = new UsersDto()
+                            {
+                                Id = id,
+                                UserName = Username,
+                                Email = Email,
+                                RoleId = roleid,
+                                DateCreated = datecreted,
+                                DateUpdated = dateupdated,
+                                DateDeleted = null,
+                                Status = status,
+                                IsDeleted = deleted,
+                                RoleName = rolename
+                            };
+                            result.Add(usersDto);
+
+                        }
+                    }
+                }
+
+                connection.Close();
+                //var users = await _context.Users.Include(x => x.roles).ToListAsync();
+
+                response.Entity = result;
                 response.Status = true;
             }
             catch(Exception ex)
@@ -41,15 +94,64 @@ namespace HRMS.Services.Interfaces
             
             return response;
         }
-        public async Task<ResponseModel<UsersDto>> GetUserById(int id)
+        public async Task<ResponseModel<UsersDto>> GetUserById(int id,string conn)
         {
             ResponseModel<UsersDto> response = new ResponseModel<UsersDto>();
 
             try
             {
-                var users = await _context.Users.Include(i => i.roles).FirstOrDefaultAsync(x => x.Id == id);
+                //var users = await _context.Users.Include(i => i.roles).FirstOrDefaultAsync(x => x.Id == id);
 
-                response.Entity = this.mapper.Map<UsersDto>(users);
+                SqlConnection connection = new SqlConnection();
+                connection.ConnectionString = conn;
+
+                connection.Open();
+                string procedureName = "[dbo].[GetUsers]";
+                var result = new UsersDto();
+                using (SqlCommand sqlCommand = new SqlCommand(procedureName, connection))
+                {
+                    sqlCommand.CommandType = CommandType.StoredProcedure;
+                    sqlCommand.Parameters.Add("@UserId", SqlDbType.Int).Value = id;
+                    using (SqlDataReader reader = sqlCommand.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            int ids = int.Parse(reader[0].ToString());
+                            string Username = reader[1].ToString();
+                            string Email = reader[2].ToString();
+                            int roleid = int.Parse(reader[3].ToString());
+                            DateTime datecreted = (DateTime)reader[4];
+                            DateTime dateupdated = (DateTime)reader[5];
+                            bool status = (bool)reader[6];
+                            bool deleted = (bool)reader[7];
+                            string rolename = reader[8].ToString();
+
+
+
+
+                            UsersDto usersDto = new UsersDto()
+                            {
+                                Id = ids,
+                                UserName = Username,
+                                Email = Email,
+                                RoleId = roleid,
+                                DateCreated = datecreted,
+                                DateUpdated = dateupdated,
+                                DateDeleted = null,
+                                Status = status,
+                                IsDeleted = deleted,
+                                RoleName = rolename
+                            };
+                            result=(usersDto);
+
+                        }
+                    }
+                }
+
+                connection.Close();
+
+
+                response.Entity = result;
                 response.Status = true;
             }
             catch (Exception ex)

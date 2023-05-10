@@ -15,12 +15,11 @@ namespace HRMS.Models
 
         private static readonly Lazy<Logger> instance = new Lazy<Logger>(() => new Logger());
 
-        public static Logger GetInstance
+        public static Logger GetInstance()
         {
-            get
-            {
+            
                 return instance.Value;
-            }
+            
             
         }
         public void LogError(string message)

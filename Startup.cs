@@ -37,6 +37,7 @@ namespace HRMS
         public void ConfigureServices(IServiceCollection services)
         {
 
+            services.AddSingleton<IConfiguration>(Configuration);
             services.AddControllers().AddNewtonsoftJson(options =>
                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
             ); 
@@ -46,6 +47,8 @@ namespace HRMS
             services.AddDbContext<HRMSDbContext>(options => options.UseSqlServer(
                 Configuration.GetConnectionString("HRMSDBConnection")
                 ));
+
+            
 
             //services.AddSingleton<ILog,Logger>();
 
