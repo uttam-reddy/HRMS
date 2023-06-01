@@ -52,6 +52,32 @@ namespace HRMS.Controllers
             
         }
 
+
+        [HttpGet("departments")]
+        [Authorize]
+        public async Task<ActionResult<ResponseModel<IEnumerable<DepartmentDto>>>> GetDepatrments()
+        {
+            ResponseModel<IEnumerable<DepartmentDto>> response = new ResponseModel<IEnumerable<DepartmentDto>>();
+            try
+            {
+                response = await _employeeService.GetDepartments();
+                if (!response.Status)
+                {
+                    return BadRequest(response);
+                }
+                return Ok(response);
+            }
+            catch (Exception)
+            {
+                response.Status = false;
+                return BadRequest(response);
+                throw;
+            }
+
+
+
+        }
+
         // GET api/<EmployeeController>/5
         [HttpGet("{id}")]
         [Authorize]

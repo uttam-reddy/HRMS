@@ -11,6 +11,8 @@ namespace HRMS.Services.Interfaces
     {
         Task<ResponseModel<IEnumerable<EmployeeDto>>> GetEmployees();
 
+        Task<ResponseModel<IEnumerable<DepartmentDto>>> GetDepartments();
+
         Task<ResponseModel<EmployeeDto>> GetEmployeeById(int id);
 
         Task<ResponseModel<EmployeeDto>> CreateEmployees(EmployeeDto employeeDto);

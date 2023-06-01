@@ -49,7 +49,7 @@ namespace HRMS.Services.Interfaces
 
             try
             {
-                var employees = await _context.Employees.FindAsync(id);
+                var employees = await _context.Employees.Include(x => x.Department).FirstOrDefaultAsync(x => x.Id == id);
 
                 response.Entity = this.mapper.Map<EmployeeDto>(employees);
                 response.Status = true;
@@ -108,7 +108,7 @@ namespace HRMS.Services.Interfaces
 
             try
             {
-                var employee = await _context.Employees.FindAsync(id);
+                var employee = await _context.Employees.Include(x => x.Department).FirstOrDefaultAsync(x => x.Id == id);
                 if (employee == null)
                 {
                     response.Status = false;
@@ -125,9 +125,10 @@ namespace HRMS.Services.Interfaces
                     employee.Name = employeeDto.Name;
                     employee.Salary = employeeDto.Salary;
                     employee.Address = employeeDto.Address;
+                    employee.DeptId = employeeDto.DepartmentId;
                     _context.Entry(employee).State = EntityState.Modified;
                     await _context.SaveChangesAsync();
-                    var employeeupdate = await _context.Employees.FindAsync(id);
+                    var employeeupdate = await _context.Employees.Include(x => x.Department).FirstOrDefaultAsync(x => x.Id == id);
                     response.Entity = this.mapper.Map<EmployeeDto>(employeeupdate);
                     response.Status = true;
                 }
@@ -182,6 +183,28 @@ namespace HRMS.Services.Interfaces
             }
 
             return response;
+        }
+
+        public async Task<ResponseModel<IEnumerable<DepartmentDto>>> GetDepartments()
+        {
+            ResponseModel<IEnumerable<DepartmentDto>> response = new ResponseModel<IEnumerable<DepartmentDto>>();
+
+            try
+            {
+                var departments = await _context.Departments.ToListAsync();
+
+                response.Entity = this.mapper.Map<List<DepartmentDto>>(departments);
+                response.Status = true;
+            }
+            catch (Exception ex)
+            {
+                response.Status = false;
+                response.ReturnMessage.Add(ex.Message);
+                Ilog.LogError(ex.Message);
+            }
+
+            return response;
+            
         }
     }
 }
